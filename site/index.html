@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#a6192e">
+<meta name="description" content="A pizza dough planner with ingredients, flour blends, and a timed fermentation schedule.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Red Oven Dough — Pizza dough planner">
+<meta property="og:description" content="Choose your flour and batch size, then get a pizza dough recipe and schedule ready for the oven.">
+<meta property="og:url" content="https://red-oven-dough.pages.dev/">
+<meta property="og:image" content="https://red-oven-dough.pages.dev/social-card.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Red Oven Dough pizza dough calculator on a red background with a pizza illustration">
+<meta name="twitter:card" content="summary_large_image">
+<title>Red Oven Dough — Pizza dough planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>">
+</head>
+<body>
+
+<div class="awning" aria-hidden="true"></div>
+
+<header class="hero">
+  <p class="eyebrow">RED OVEN PIZZA <span>✦</span> THE DOUGH CALCULATOR</p>
+  <h1>RED OVEN<br><em>DOUGH.</em></h1>
+  <p class="tagline">Good pizza starts with good dough. Choose your batch size and flour, then get the ingredients and timings ready for the oven.</p>
+  <div class="hero-pizza" aria-hidden="true">🍕</div>
+  <div class="hero-rule" aria-hidden="true"><span>01 / MIX</span><span>02 / PROVE</span><span>03 / BAKE</span></div>
+</header>
+
+<main>
+  <!-- ============ DOUGH AMOUNT ============ -->
+  <section class="card inputs-card">
+    <h2><span class="badge">01</span> Your batch <small>How many pizzas?</small></h2>
+
+    <div class="control-row">
+      <label class="control-label" for="ballCount">Dough balls <span class="hint">(250 g each)</span></label>
+      <div class="stepper">
+        <button type="button" class="step-btn" id="ballMinus" aria-label="fewer balls">−</button>
+        <output id="ballDisplay">2</output>
+        <button type="button" class="step-btn" id="ballPlus" aria-label="more balls">+</button>
+      </div>
+      <input type="range" id="ballCount" min="1" max="12" value="2" step="1">
+      <div class="ball-row" id="ballRow" aria-hidden="true"></div>
+    </div>
+
+    <div class="control-row">
+      <span class="control-label">Salt type</span>
+      <div class="pill-group" id="saltGroup" role="group" aria-label="Salt type">
+        <button type="button" class="pill selected" data-value="sea_salt" aria-pressed="true">Sea salt</button>
+        <button type="button" class="pill" data-value="table_salt" aria-pressed="false">Table salt</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FLOUR STATION ============ -->
+  <section class="card inputs-card">
+    <h2><span class="badge">02</span> Your flour <small>Choose your blend</small></h2>
+
+    <div class="control-row">
+      <div class="pill-group" id="flourGroup" role="group" aria-label="Flour type">
+        <button type="button" class="pill selected" data-value="00bread" aria-pressed="true">00 + Bread</button>
+        <button type="button" class="pill" data-value="00" aria-pressed="false">100% 00</button>
+        <button type="button" class="pill" data-value="bread" aria-pressed="false">100% Bread</button>
+        <button type="button" class="pill" data-value="plain" aria-pressed="false">Plain</button>
+        <button type="button" class="pill" data-value="wholemeal" aria-pressed="false">Wholemeal mix</button>
+      </div>
+    </div>
+
+    <div class="control-row" id="ratioRow">
+      <label class="control-label" for="ratioSlider">Blend: <span id="ratioLabel" class="ratio-label">50% 00 / 50% bread</span></label>
+      <input type="range" id="ratioSlider" min="0" max="100" value="50" step="5">
+    </div>
+
+    <div class="control-row" id="wmRow" hidden>
+      <label class="control-label" for="wmSlider">Blend: <span id="wmLabel" class="ratio-label">20% wholemeal / 80% bread</span></label>
+      <input type="range" id="wmSlider" min="10" max="40" value="20" step="5">
+    </div>
+
+    <div class="flour-note" id="flourNote"></div>
+  </section>
+
+  <!-- ============ TIMING ============ -->
+  <section class="card inputs-card">
+    <h2><span class="badge">03</span> Pizza time <small>When will you bake?</small></h2>
+
+    <div class="control-row">
+      <label class="control-label" for="hoursSlider">Pizza ready in&hellip;</label>
+      <div class="stepper">
+        <button type="button" class="step-btn" id="hoursMinus" aria-label="fewer hours">−</button>
+        <output id="hoursDisplay">5 h</output>
+        <button type="button" class="step-btn" id="hoursPlus" aria-label="more hours">+</button>
+      </div>
+      <input type="range" id="hoursSlider" min="2" max="72" value="5" step="0.5">
+      <div class="window-note" id="readyNote" aria-live="polite"></div>
+      <p class="timing-note">Timings are estimates. Dough rises faster in a warm room, so check how it looks and feels as well as the clock.</p>
+    </div>
+  </section>
+
+  <!-- ============ MESSAGE / ERROR ============ -->
+  <div id="mamaMessage" class="mama-message" hidden></div>
+
+  <!-- ============ RESULTS ============ -->
+  <div id="results" hidden>
+    <section class="card results-card">
+    <h2><span class="badge">04</span> Ingredients <small>What you'll need</small></h2>
+      <div class="ingredient-grid" id="ingredientGrid"></div>
+      <p class="recipe-footnote">Weights are rounded for measuring. Total dough weight is approximate.</p>
+      <div class="share-actions">
+        <button type="button" class="action-btn" id="copyRecipe">Copy recipe</button>
+        <button type="button" class="action-btn action-btn-secondary" id="copyLink">Copy link to these settings</button>
+      </div>
+      <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card results-card">
+      <h2><span class="badge">05</span> Dough schedule <small>From mixing to baking</small></h2>
+      <ol class="timeline" id="timeline"></ol>
+      <div id="coldRetard" class="cold-retard" hidden>
+        <span class="cold-emoji">🧊</span>
+        <div>
+          <strong>A longer, colder prove</strong>
+          <p>After balling, keep the dough covered in the fridge. Bring it out 1 hour 45 minutes before pizza time.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="praise" id="praise"><span>READY FOR THE OVEN</span><strong>Your pizza dough is planned.</strong></div>
+  </div>
+</main>
+
+<footer>
+  <div class="checker-band bottom"></div>
+  <p><strong>RED OVEN DOUGH ✦</strong> &nbsp; Made for better pizza nights.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# Local previews and generated upload bundle
+.claude/
+red-oven-dough-site.zip
+node_modules/
+.wrangler/
+*.log
+
+# Local secrets, if added later
+.env
+.env.*

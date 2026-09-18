@@ -1,0 +1,7 @@
+services:
+  pizza-calc:
+    build: .
+    container_name: pizza-calc
+    restart: unless-stopped
+    ports:
+      - "8085:80"
